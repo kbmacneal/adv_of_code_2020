@@ -14,8 +14,8 @@ namespace adv_of_code_2020
             public int max { get; set; }
             public char letter { get; set; }
             public string value { get; set; }
-            public Boolean isValid { get; set; } = false;
-            public Boolean isPart2Valid { get; set; } = false;
+            public Boolean isValid => value.Where(e => e == letter).Count() <= max && value.Where(e => e == letter).Count() >= min;
+            public Boolean isPart2Valid => value[min - 1] == letter ^ value[max - 1] == letter;
         }
 
         public static async Task<string> Run()
@@ -26,11 +26,7 @@ namespace adv_of_code_2020
 
             System.IO.File.ReadAllLines("inputs\\2.txt").ToList().ForEach(e => passwords.Add(parse_line(e)));
 
-            passwords.ForEach(e => e.isValid = (check_for_valid(e)));
-
             answer.AppendLine("Part 1: " + passwords.Where(e => e.isValid).Count());
-
-            passwords.ForEach(e => e.isPart2Valid = (check_for_part2(e)));
 
             answer.AppendLine("Part 2: " + passwords.Where(e => e.isPart2Valid).Count());
 
@@ -52,22 +48,5 @@ namespace adv_of_code_2020
             return p;
         }
 
-        private static Boolean check_for_valid(password p)
-        {
-            int[] password_array = p.value.ToCharArray().Select(e => (int)e).ToArray();
-
-            int letter_int = (int)p.letter;
-
-            return password_array.Where(e => e == letter_int).Count() <= p.max && password_array.Where(e => e == letter_int).Count() >= p.min;
-        }
-
-        private static Boolean check_for_part2(password p)
-        {
-            int[] password_array = p.value.ToCharArray().Select(e => (int)e).ToArray();
-
-            int letter_int = (int)p.letter;
-
-            return password_array[p.min - 1] == letter_int ^ password_array[p.max - 1] == letter_int;
-        }
     }
 }
