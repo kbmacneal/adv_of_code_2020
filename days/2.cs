@@ -32,7 +32,7 @@ namespace adv_of_code_2020
 
             passwords.ForEach(e => e.isPart2Valid = (check_for_part2(e)));
 
-            answer.AppendLine("Part 1: " + passwords.Where(e => e.isPart2Valid).Count());
+            answer.AppendLine("Part 2: " + passwords.Where(e => e.isPart2Valid).Count());
 
             return answer.ToString();
         }
