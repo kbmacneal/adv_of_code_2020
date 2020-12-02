@@ -68,6 +68,21 @@ namespace adv_of_code_.Classes
             return p.X.Abs() + p.Y.Abs();
         }
 
+        //from https://github.com/sjmulder/aoc/blob/master/2020/day01-cs-combine/Program.cs
+        static IEnumerable<IEnumerable<T>> Combine<T>(this T[] xs, int n)
+        {
+            if (n > xs.Length) yield break;
+            var idxs = Enumerable.Range(0, n).ToArray();
+
+            while (true)
+            {
+                yield return idxs.Select(i => xs[i]);
+                int i = n - 1;
+                while (++idxs[i] > xs.Length - n + i) if (--i < 0) yield break;
+                while (++i < n) idxs[i] = idxs[i - 1] + 1;
+            }
+        }
+
         //from https://www.geeksforgeeks.org/lcm-of-given-array-elements/
         public static long GetLCM(this int[] element_array)
         {
