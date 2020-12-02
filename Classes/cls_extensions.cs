@@ -69,7 +69,7 @@ namespace adv_of_code_.Classes
         }
 
         //from https://github.com/sjmulder/aoc/blob/master/2020/day01-cs-combine/Program.cs
-        static IEnumerable<IEnumerable<T>> Combine<T>(this T[] xs, int n)
+        private static IEnumerable<IEnumerable<T>> Combine<T>(this T[] xs, int n)
         {
             if (n > xs.Length) yield break;
             var idxs = Enumerable.Range(0, n).ToArray();

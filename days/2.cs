@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace adv_of_code_2020
         {
             StringBuilder answer = new StringBuilder();
 
-            List<password> passwords = System.IO.File.ReadAllLines("inputs\\2.txt").Select(e => new password(e)).ToList();
+            List<password> passwords = File.ReadAllLines("inputs\\2.txt").Select(e => new password(e)).ToList();
 
             answer.AppendLine("Part 1: " + passwords.Where(e => e.isValid).Count());
 
