@@ -14,6 +14,18 @@ namespace adv_of_code_2020
             public int x { get; set; }
             public int y { get; set; }
             public long trees { get; set; } = 0;
+
+            public void GetTreesForSlope(List<string> course)
+            {
+                int tree_count = 0;
+
+                for (int y = 0, x = 0; y < course.Count; y += this.y, x += this.x)
+                {
+                    if (course[y][x % course[y].Length] == '#') tree_count++;
+                }
+
+                trees = tree_count;
+            }
         }
 
         public static async Task<string> Run()
@@ -21,22 +33,6 @@ namespace adv_of_code_2020
             StringBuilder answer = new StringBuilder();
 
             List<string> course = File.ReadAllLines("inputs\\3.txt").ToList();
-
-            var pos_x = -3;
-
-            var tree_count = 0;
-
-            for (int y = 0; y < course.Count; y++)
-            {
-                if (y != course.Count - 1)
-                {
-                    pos_x = (pos_x + 3) % course[y + 1].Length;
-                }
-
-                if (course[y][pos_x] == '#') tree_count++;
-            }
-
-            answer.AppendLine("Part 1: " + tree_count.ToString());
 
             List<slope> slopes = new List<slope>()
             {
@@ -62,31 +58,13 @@ namespace adv_of_code_2020
                 }
             };
 
-            foreach (slope slope in slopes)
-            {
-                pos_x = -1 * slope.x;
-                tree_count = 0;
+            slopes.ForEach(e => e.GetTreesForSlope(course));
 
-                slope.trees = GetTreesForSlope(slope.x, slope.y, course);
-            }
+            answer.AppendLine("Part 1: " + slopes.First(e=>e.x ==3).trees.ToString());
 
             answer.AppendLine("Part 2: " + slopes.Select(e => e.trees).Product());
 
             return answer.ToString();
         }
-
-        private static long GetTreesForSlope(int dx, int dy, List<string> course)
-        {
-            int tree_count = 0;
-
-            for (int y = 0, x = 0; y < course.Count; y += dy, x += dx)
-            {
-                if (course[y][x % course[y].Length] == '#') tree_count++;
-            }
-
-            return tree_count;
-        }
-
-
     }
 }
