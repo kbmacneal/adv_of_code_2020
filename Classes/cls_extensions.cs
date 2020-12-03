@@ -13,6 +13,28 @@ namespace adv_of_code_.Classes
             return values.SelectMany(v => Permutations(values.Where(x => x.Equals(v) == false)), (v, p) => p.Prepend(v));
         }
 
+        public static long Product(this IEnumerable<int> product)
+        {
+            long answer = 1;
+
+            foreach (int item in product)
+            {
+                answer *= item;
+            }
+            return answer;
+        }
+
+        public static long Product(this IEnumerable<long> product)
+        {
+            long answer = 1;
+
+            foreach (int item in product)
+            {
+                answer *= item;
+            }
+            return answer;
+        }
+
         public static Int32 Abs(this Int32 num)
         {
             return Math.Abs(num);
