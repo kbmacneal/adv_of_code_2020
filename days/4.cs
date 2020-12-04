@@ -22,11 +22,11 @@ namespace adv_of_code_2020
             public string cid { get; set; } = "";
             public Boolean isValid => byr != "" && iyr != "" && eyr != "" && hgt != "" && hcl != "" && ecl != "" && pid != "";
 
-            public Boolean isPart2Valid { get; set; } = false;
+            public Boolean isPart2Valid => validate();
 
             private string[] valid_eye_colors { get; } = { "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
 
-            public Boolean validate()
+            private Boolean validate()
             {
                 if (Int32.Parse(byr) < 1920 || Int32.Parse(byr) > 2002)
                     return false;
@@ -128,11 +128,9 @@ namespace adv_of_code_2020
 
             List<passport> passports = input.ToList().Select(i => new passport(i.Replace(" ", "\n").Split("\n", StringSplitOptions.RemoveEmptyEntries))).ToList();
 
-            passports.Where(e => e.isValid).ToList().ForEach(e => e.isPart2Valid = e.validate());
-
             answer.AppendLine("Part 1: " + passports.Where(e => e.isValid).Count());
 
-            answer.AppendLine("Part 2: " + passports.Where(e => e.isPart2Valid).Count());
+            answer.AppendLine("Part 2: " + passports.Where(e => e.isValid).Where(e => e.isPart2Valid).Count());
 
             return answer.ToString();
         }
