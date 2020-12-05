@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
-    public class Day3
+    public class Day3 :IDay
     {
         private class slope
         {
@@ -28,7 +28,7 @@ namespace adv_of_code_2020
             }
         }
 
-        public static async Task<string> Run()
+        public async Task<string> Run()
         {
             StringBuilder answer = new StringBuilder();
 

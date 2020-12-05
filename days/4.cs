@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
-    public class Day4
+    public class Day4 : IDay
     {
         private class passport
         {
@@ -113,6 +113,8 @@ namespace adv_of_code_2020
                             cid = split[1];
                             break;
 
+                        case "\r":
+                            break;
                         default:
                             throw new NotImplementedException();
                     }
@@ -120,7 +122,7 @@ namespace adv_of_code_2020
             }
         }
 
-        public static async Task<string> Run()
+        public async Task<string> Run()
         {
             StringBuilder answer = new StringBuilder();
 

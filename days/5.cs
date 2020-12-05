@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
-    public class Day5
+    public class Day5 : IDay 
     {
         private class instruction
         {
@@ -32,7 +32,7 @@ namespace adv_of_code_2020
             }
         }
 
-        public static async Task<string> Run()
+        public async Task<string> Run()
         {
             StringBuilder answer = new StringBuilder();
 

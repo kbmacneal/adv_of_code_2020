@@ -29,38 +29,38 @@ namespace adv_of_code_2020
 
                    if (o.latest)
                    {
-                       var max_day = Assembly.GetEntryAssembly().GetTypes().Where(e => e.FullName.Contains("Day") && !e.FullName.Contains("+")).Select(e => e.FullName.Substring(20)).Select(Int32.Parse).Max();
+                       var type = typeof(IDay);
+                       var types = AppDomain.CurrentDomain.GetAssemblies()
+                            .SelectMany(s => s.GetTypes())
+                            .Where(p => type.IsAssignableFrom(p))
+                            .Where(e => e.Name != "IDay")
+                            .OrderByDescending(e => e.GetType().Name);
 
-                       Console.WriteLine("Running " + "adv_of_code_2020.Day" + max_day.ToString());
+                       Type t = types.First();
 
-                       var cls = Assembly.GetEntryAssembly().GetType("adv_of_code_2020.Day" + max_day.ToString());
+                       IDay day = (IDay)Activator.CreateInstance(t);
 
-                       MethodInfo method = cls.GetMethod("Run");
+                       string result = day.Run().GetAwaiter().GetResult();
 
-                       Task<string> result = (Task<string>)method.Invoke(null, null);
-
-                       result.Wait();
-
-                       Console.WriteLine(result.Result);
-
-                       result.Dispose();
+                       Console.WriteLine(result);
                    }
 
                    if (o.day > 0)
                    {
-                       Console.WriteLine("Running " + "adv_of_code_2020.Day" + o.day.ToString());
+                       var type = typeof(IDay);
+                       Type t = AppDomain.CurrentDomain.GetAssemblies()
+                            .SelectMany(s => s.GetTypes())
+                            .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
+                            .Where(e=>e.Name.Contains("Day" + o.day.ToString()))
+                            .Where(e => e.Name != "IDay")
+                            .OrderByDescending(e => e.GetType().Name)
+                            .First();
 
-                       var cls = Assembly.GetEntryAssembly().GetType("adv_of_code_2020.Day" + o.day.ToString());
+                       IDay day = (IDay)Activator.CreateInstance(t);
 
-                       MethodInfo method = cls.GetMethod("Run");
+                       string result = day.Run().GetAwaiter().GetResult();
 
-                       Task<string> result = (Task<string>)method.Invoke(null, null);
-
-                       result.Wait();
-
-                       Console.WriteLine(result.Result);
-
-                       result.Dispose();
+                       Console.WriteLine(result);
                    }
 
                    if (!o.latest && o.day == 0)

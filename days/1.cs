@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
-    public class Day1
+    public class Day1 : IDay
     {
-        public static async Task<string> Run()
+        public async Task<string> Run()
         {
             int[] numbers = File.ReadAllLines("inputs\\1.txt").Select(e => Int32.Parse(e)).ToArray();
 
