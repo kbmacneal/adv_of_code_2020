@@ -72,17 +72,20 @@ namespace adv_of_code_2020
 
                        if (Int32.TryParse(Console.ReadLine(), out var day_num))
                        {
-                           var cls = Assembly.GetEntryAssembly().GetType("adv_of_code_2020.Day" + day_num.ToString());
+                           var type = typeof(IDay);
+                           Type t = AppDomain.CurrentDomain.GetAssemblies()
+                                .SelectMany(s => s.GetTypes())
+                                .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
+                                .Where(e => e.Name.Contains("Day" + day_num.ToString()))
+                                .Where(e => e.Name != "IDay")
+                                .OrderByDescending(e => e.GetType().Name)
+                                .First();
 
-                           MethodInfo method = cls.GetMethod("Run");
+                           IDay day = (IDay)Activator.CreateInstance(t);
 
-                           Task<string> result = (Task<string>)method.Invoke(null, null);
+                           day.Run().GetAwaiter().GetResult();
 
-                           result.Wait();
-
-                           Console.WriteLine(result.Result);
-
-                           result.Dispose();
+                           Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
                        }
                    }
 
