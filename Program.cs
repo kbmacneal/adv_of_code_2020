@@ -15,6 +15,9 @@ namespace adv_of_code_2020
 
             [Option('l', "latest", HelpText = "Run the solution using the latest day.")]
             public bool latest { get; set; }
+
+            [Option('a', "all", HelpText = "Run all days, in order")]
+            public bool all { get; set; }
         }
 
         private static void Main(string[] args)
@@ -34,15 +37,15 @@ namespace adv_of_code_2020
                             .SelectMany(s => s.GetTypes())
                             .Where(p => type.IsAssignableFrom(p))
                             .Where(e => e.Name != "IDay")
-                            .OrderByDescending(e => e.GetType().Name);
+                            .OrderBy(e => e.GetType().Name);
 
-                       Type t = types.First();
+                       Type t = types.Last();
 
                        IDay day = (IDay)Activator.CreateInstance(t);
 
-                       string result = day.Run().GetAwaiter().GetResult();
+                       day.Run().GetAwaiter().GetResult();
 
-                       Console.WriteLine(result);
+                       Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
                    }
 
                    if (o.day > 0)
@@ -51,19 +54,19 @@ namespace adv_of_code_2020
                        Type t = AppDomain.CurrentDomain.GetAssemblies()
                             .SelectMany(s => s.GetTypes())
                             .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
-                            .Where(e=>e.Name.Contains("Day" + o.day.ToString()))
+                            .Where(e => e.Name.Contains("Day" + o.day.ToString()))
                             .Where(e => e.Name != "IDay")
                             .OrderByDescending(e => e.GetType().Name)
                             .First();
 
                        IDay day = (IDay)Activator.CreateInstance(t);
 
-                       string result = day.Run().GetAwaiter().GetResult();
+                       day.Run().GetAwaiter().GetResult();
 
-                       Console.WriteLine(result);
+                       Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
                    }
 
-                   if (!o.latest && o.day == 0)
+                   if (!o.latest && o.day == 0 && !o.all)
                    {
                        Console.WriteLine("Input Day");
 
@@ -80,6 +83,27 @@ namespace adv_of_code_2020
                            Console.WriteLine(result.Result);
 
                            result.Dispose();
+                       }
+                   }
+
+                   if (o.all)
+                   {
+                       var type = typeof(IDay);
+                       var types = AppDomain.CurrentDomain.GetAssemblies()
+                            .SelectMany(s => s.GetTypes())
+                            .Where(p => type.IsAssignableFrom(p))
+                            .Where(e => e.Name != "IDay")
+                            .OrderBy(e => e.GetType().Name);
+
+                       foreach (Type t in types)
+                       {
+                           IDay day = (IDay)Activator.CreateInstance(t);
+
+                           day.Run().GetAwaiter().GetResult();
+
+                           Console.WriteLine(t.Name);
+
+                           Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
                        }
                    }
                });

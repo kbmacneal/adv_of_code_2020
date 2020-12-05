@@ -2,7 +2,7 @@
   "profiles": {
     "adv_of_code_2020": {
       "commandName": "Project",
-      "commandLineArgs": "-d 4"
+      "commandLineArgs": "-l"
     }
   }
 }

@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
-    public class Day5 : IDay 
+    public class Day5 : IDay
     {
+        public string Part1Answer { get; set; }
+        public string Part2Answer { get; set; }
+
         private class instruction
         {
             public string full_instruction { get; set; }
@@ -32,10 +34,8 @@ namespace adv_of_code_2020
             }
         }
 
-        public async Task<string> Run()
+        public async Task Run()
         {
-            StringBuilder answer = new StringBuilder();
-
             string[] input = await File.ReadAllLinesAsync("inputs\\5.txt");
 
             List<instruction> instructions = input.ToList().Select(e => new instruction(e)).ToList();
@@ -91,15 +91,13 @@ namespace adv_of_code_2020
                 instruction.col = instruction.col_min;
             }
 
-            answer.AppendLine("Part 1: " + instructions.Max(e => e.id));
+            Part1Answer = instructions.Max(e => e.id).ToString();
 
             var seat_numbers = Enumerable.Range(0, instructions.Max(e => e.id));
 
             var open_seats = seat_numbers.Where(e => !instructions.Select(f => f.id).Contains(e));
 
-            answer.AppendLine("Part 2: " + open_seats.Max());
-
-            return answer.ToString();
+            Part2Answer = open_seats.Max().ToString();
         }
     }
 }

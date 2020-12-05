@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
     public class Day2 : IDay
     {
+        public string Part1Answer { get; set; } = "";
+        public string Part2Answer { get; set; } = "";
+
         private class password
         {
             public int min { get; set; }
@@ -28,17 +30,12 @@ namespace adv_of_code_2020
             }
         }
 
-        public async Task<string> Run()
+        public async Task Run()
         {
-            StringBuilder answer = new StringBuilder();
-
             List<password> passwords = File.ReadAllLines("inputs\\2.txt").Select(e => new password(e)).ToList();
 
-            answer.AppendLine("Part 1: " + passwords.Where(e => e.isValid).Count());
-
-            answer.AppendLine("Part 2: " + passwords.Where(e => e.isPart2Valid).Count());
-
-            return answer.ToString();
+            Part1Answer = passwords.Where(e => e.isValid).Count().ToString();
+            Part2Answer = passwords.Where(e => e.isPart2Valid).Count().ToString();
         }
     }
 }

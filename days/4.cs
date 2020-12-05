@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -10,6 +9,9 @@ namespace adv_of_code_2020
 {
     public class Day4 : IDay
     {
+        public string Part1Answer { get; set; } = "";
+        public string Part2Answer { get; set; } = "";
+
         private class passport
         {
             public string byr { get; set; } = "";
@@ -115,6 +117,7 @@ namespace adv_of_code_2020
 
                         case "\r":
                             break;
+
                         default:
                             throw new NotImplementedException();
                     }
@@ -122,19 +125,15 @@ namespace adv_of_code_2020
             }
         }
 
-        public async Task<string> Run()
+        public async Task Run()
         {
-            StringBuilder answer = new StringBuilder();
-
             string[] input = File.ReadAllText("inputs\\4.txt").Split("\n\n");
 
             List<passport> passports = input.ToList().Select(i => new passport(i.Replace(" ", "\n").Split("\n", StringSplitOptions.RemoveEmptyEntries))).ToList();
 
-            answer.AppendLine("Part 1: " + passports.Where(e => e.isValid).Count());
+            Part1Answer = passports.Where(e => e.isValid).Count().ToString();
 
-            answer.AppendLine("Part 2: " + passports.Where(e => e.isValid).Where(e => e.isPart2Valid).Count());
-
-            return answer.ToString();
+            Part2Answer = passports.Where(e => e.isValid).Where(e => e.isPart2Valid).Count().ToString();
         }
     }
 }

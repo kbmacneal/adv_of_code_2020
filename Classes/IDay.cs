@@ -1,13 +1,14 @@
-using System;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
     public interface IDay
     {
-        public async Task<string> Run()
+        public string Part1Answer { get; set; }
+        public string Part2Answer { get; set; }
+
+        public async Task Run()
         {
-            return "Not Implemented";
         }
     }
 }

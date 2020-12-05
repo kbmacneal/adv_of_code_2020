@@ -2,13 +2,15 @@ using adv_of_code_.Classes;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
-    public class Day3 :IDay
+    public class Day3 : IDay
     {
+        public string Part1Answer { get; set; } = "";
+        public string Part2Answer { get; set; } = "";
+
         private class slope
         {
             public int x { get; set; }
@@ -28,10 +30,8 @@ namespace adv_of_code_2020
             }
         }
 
-        public async Task<string> Run()
+        public async Task Run()
         {
-            StringBuilder answer = new StringBuilder();
-
             List<string> course = File.ReadAllLines("inputs\\3.txt").ToList();
 
             List<slope> slopes = new List<slope>()
@@ -60,11 +60,8 @@ namespace adv_of_code_2020
 
             slopes.ForEach(e => e.GetTreesForSlope(course));
 
-            answer.AppendLine("Part 1: " + slopes.First(e=>e.x ==3).trees.ToString());
-
-            answer.AppendLine("Part 2: " + slopes.Select(e => e.trees).Product());
-
-            return answer.ToString();
+            Part1Answer = slopes.First(e => e.x == 3).trees.ToString();
+            Part2Answer = slopes.Select(e => e.trees).Product().ToString();
         }
     }
 }

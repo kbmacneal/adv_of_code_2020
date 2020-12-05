@@ -1,18 +1,18 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
     public class Day1 : IDay
     {
-        public async Task<string> Run()
+        public string Part1Answer { get; set; } = "";
+        public string Part2Answer { get; set; } = "";
+
+        public async Task Run()
         {
             int[] numbers = File.ReadAllLines("inputs\\1.txt").Select(e => Int32.Parse(e)).ToArray();
-
-            StringBuilder answers = new StringBuilder();
 
             bool part1 = false;
 
@@ -26,7 +26,7 @@ namespace adv_of_code_2020
                 {
                     if (numbers[i] + numbers[j] == 2020)
                     {
-                        answers.AppendLine("Part 1: " + numbers[i] * numbers[j]);
+                        Part1Answer = (numbers[i] * numbers[j]).ToString();
                         part1 = true;
                         break;
                     }
@@ -44,7 +44,7 @@ namespace adv_of_code_2020
                     {
                         if (numbers[i] + numbers[j] + numbers[k] == 2020)
                         {
-                            answers.AppendLine("Part 2: " + numbers[i] * numbers[j] * numbers[k]);
+                            Part2Answer = (numbers[i] * numbers[j] * numbers[k]).ToString();
                             part2 = true;
                             break;
                         }
@@ -53,8 +53,6 @@ namespace adv_of_code_2020
                 }
                 if (part2) break;
             }
-
-            return answers.ToString();
         }
     }
 }
