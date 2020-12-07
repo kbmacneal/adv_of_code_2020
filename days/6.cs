@@ -7,8 +7,8 @@ namespace adv_of_code_2020
 {
     public class Day6 : IDay
     {
-        public string Part1Answer { get; set; }
-        public string Part2Answer { get; set; }
+        public string Part1Answer { get; set; } = "";
+        public string Part2Answer { get; set; } = "";
 
         public async Task Run()
         {

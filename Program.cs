@@ -1,8 +1,6 @@
 ﻿using CommandLine;
 using System;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
