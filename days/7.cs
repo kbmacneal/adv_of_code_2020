@@ -17,14 +17,7 @@ namespace adv_of_code_2020
 
             Dictionary<string, string> RuleDict = input.Select(e => e.Substring(0, e.Length - 1).Replace(" bags", "").Replace(" bag", "")).ToDictionary(e => e.Split(" contain ")[0], f => f.Split(" contain ")[1]);
 
-            int count = 0;
-
-            foreach (string key in RuleDict.Keys)
-            {
-                if (HasShinyGold(key, RuleDict)) count++;
-            }
-
-            Part1Answer = count.ToString();
+            Part1Answer = RuleDict.Select(e => e.Key).Where(e => HasShinyGold(e, RuleDict)).Count().ToString();
 
             Part2Answer = Part2(RuleDict).ToString();
         }
@@ -57,8 +50,6 @@ namespace adv_of_code_2020
                     var num = Convert.ToInt32(s.Substring(0, 1));
                     totalBags += num + num * Part2(RuleDict, s.Substring(2));
                 }
-                else
-                    break;
             }
             return totalBags;
         }
