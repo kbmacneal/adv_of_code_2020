@@ -11,18 +11,36 @@ namespace adv_of_code_2020
         public string Part1Answer { get; set; } = "";
         public string Part2Answer { get; set; } = "";
 
+        private class instruction
+        {
+            public string Command { get; set; }
+            public int Value { get; set; }
+
+            public instruction(string line)
+            {
+                Command = line.Split(" ")[0];
+                Value = Int32.Parse(line.Split(" ")[1]);
+            }
+
+            public instruction(string command, int value)
+            {
+                Command = command;
+                Value = value;
+            }
+        }
+
         public async Task Run()
         {
-            List<KeyValuePair<string, int>> input = (await File.ReadAllLinesAsync("inputs\\8.txt")).Select(x => new KeyValuePair<string, int>(x.Split(" ")[0], Int32.Parse(x.Split(" ")[1]))).ToList();
+            List<instruction> input = (await File.ReadAllLinesAsync("inputs\\8.txt")).Select(x => new instruction(x)).ToList();
 
             Part1Answer = run_sim(input).ToString();
 
             for (int i = 0; i < input.Count(); i++)
             {
-                KeyValuePair<string, int> old = input[i];
+                instruction old = input[i];
 
-                if (input[i].Key == "jmp") input[i] = new KeyValuePair<string, int>("nop", input[i].Value);
-                else if (input[i].Key == "nop") input[i] = new KeyValuePair<string, int>("jmp", input[i].Value);
+                if (input[i].Command == "jmp") input[i] = new instruction("nop", input[i].Value);
+                else if (input[i].Command == "nop") input[i] = new instruction("jmp", input[i].Value);
                 else continue;
 
                 var acc = run_sim(input, 2);
@@ -39,7 +57,7 @@ namespace adv_of_code_2020
             }
         }
 
-        private int run_sim(List<KeyValuePair<string, int>> input, int part = 1)
+        private int run_sim(List<instruction> input, int part = 1)
         {
             List<int> indices = new List<int>();
 
@@ -61,7 +79,7 @@ namespace adv_of_code_2020
                     }
                 }
 
-                switch (input[i].Key)
+                switch (input[i].Command)
                 {
                     case "acc":
                         acc += input[i].Value;
