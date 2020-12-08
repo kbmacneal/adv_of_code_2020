@@ -31,15 +31,22 @@ namespace adv_of_code_2020.Classes
 
     internal class cls_gameboy
     {
-        public List<instruction> input { get; set; }
+        private List<instruction> _input { get; set; }
+
+        public cls_gameboy(List<instruction> instructions)
+        {
+            _input = instructions;
+        }
 
         public int run_sim(Boolean infinite_loop_check = false)
         {
+            if (_input == null) throw new ArgumentNullException("_input");
+
             List<int> indices = new List<int>();
 
             int acc = 0;
 
-            for (int i = 0; i < input.Count(); i++)
+            for (int i = 0; i < _input.Count(); i++)
             {
                 indices.Add(i);
 
@@ -54,14 +61,14 @@ namespace adv_of_code_2020.Classes
                         return -1;
                     }
                 }
-                switch (input[i].Command)
+                switch (_input[i].Command)
                 {
                     case Command.acc:
-                        acc += input[i].Value;
+                        acc += _input[i].Value;
                         break;
 
                     case Command.jmp:
-                        i += input[i].Value - 1;
+                        i += _input[i].Value - 1;
                         break;
 
                     case Command.nop:

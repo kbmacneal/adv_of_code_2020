@@ -15,10 +15,7 @@ namespace adv_of_code_2020
         {
             List<instruction> input = (await File.ReadAllLinesAsync("inputs\\8.txt")).Select(x => new instruction(x)).ToList();
 
-            cls_gameboy gmb = new cls_gameboy()
-            {
-                input = input
-            };
+            cls_gameboy gmb = new cls_gameboy(input);
 
             Part1Answer = gmb.run_sim(true).ToString();
 
