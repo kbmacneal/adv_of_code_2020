@@ -32,6 +32,8 @@ namespace adv_of_code_2020
 
             var preamble_size = 25;
 
+            long part2_temp = 0;
+
             for (int i = preamble_size; i < input.Length; i++)
             {
                 long[] preamble = input.Slice(i - preamble_size, preamble_size).ToArray();
@@ -52,7 +54,36 @@ namespace adv_of_code_2020
                 if (combinations.FirstOrDefault(e => e.c == input[i]) == null)
                 {
                     Part1Answer = input[i].ToString();
+                    part2_temp = input[i];
                     break;
+                }
+            }
+
+            var reversed_input = input.Reverse().ToArray();
+
+            for (int i = 0; i < reversed_input.Length; i++)
+            {
+                if (reversed_input[i] > part2_temp) continue;
+
+                var start = reversed_input[i];
+
+                long sum = start;
+                long min = start;
+                long max = start;
+
+                for (int j = i + 1; j < reversed_input.Length; j++)
+                {
+                    sum += reversed_input[j];
+                    min = Math.Min(min, reversed_input[j]);
+                    max = Math.Max(max, reversed_input[j]);
+
+                    if (sum == part2_temp)
+                    {
+                        Part2Answer = (min + max).ToString();
+                        return;
+                    }
+
+                    if (sum > part2_temp) break;
                 }
             }
         }
