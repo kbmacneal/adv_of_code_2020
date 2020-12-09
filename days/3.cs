@@ -38,23 +38,23 @@ namespace adv_of_code_2020
             {
                 new slope
                 {
-                    x = 1,y=1
+                    x = 1, y=1
                 },
                 new slope
                 {
-                    x = 5,y=1
+                    x = 5, y=1
                 },
                 new slope
                 {
-                    x = 7,y=1
+                    x = 7, y=1
                 },
                 new slope
                 {
-                    x = 1,y=2
+                    x = 1, y=2
                 },
                 new slope
                 {
-                    x = 3,y=1
+                    x = 3, y=1
                 }
             };
 
