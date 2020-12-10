@@ -35,7 +35,7 @@ namespace adv_of_code_2020
                             .SelectMany(s => s.GetTypes())
                             .Where(p => type.IsAssignableFrom(p))
                             .Where(e => e.Name != "IDay")
-                            .OrderBy(e => e.GetType().Name);
+                            .OrderBy(e => Int32.Parse(e.Name.Replace("Day","")));
 
                        Type t = types.Last();
 
