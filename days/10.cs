@@ -42,8 +42,6 @@ namespace adv_of_code_2020
             p2_input.Add(rating);
             p2_input.Sort();
 
-            var indexedData = p2_input.ToHashSet();
-
             var graph = new Dictionary<int, List<int>>();
 
             //get the list of all numbers and associate them with all potential precursors from the list.
@@ -51,9 +49,10 @@ namespace adv_of_code_2020
             {
                 graph.Add(p2_input[i], new List<int>());
 
-                if (indexedData.Contains(p2_input[i] - 1)) graph[p2_input[i]].Add(p2_input[i] - 1);
-                if (indexedData.Contains(p2_input[i] - 2)) graph[p2_input[i]].Add(p2_input[i] - 2);
-                if (indexedData.Contains(p2_input[i] - 3)) graph[p2_input[i]].Add(p2_input[i] - 3);
+                for (int j = 1; j < 4; j++)
+                {
+                    if (p2_input.Contains(p2_input[i] - j)) graph[p2_input[i]].Add(p2_input[i] - j);
+                }
             }
 
             //the number we're looking at associated with the total number of precursors
@@ -62,6 +61,8 @@ namespace adv_of_code_2020
             for (var i = 0; i < p2_input.Count; i++)
             {
                 long count = i == 0 ? 1 : 0;
+
+                //accumulate the precursor ints as we roll up the input, essentially keeping a running tally of the number of precursor combinations
                 foreach (var g in graph[p2_input[i]])
                 {
                     count += processed[g];
@@ -70,7 +71,7 @@ namespace adv_of_code_2020
                 processed.Add(p2_input[i], count);
             }
 
-            Part2Answer = processed[p2_input[^1]].ToString();
+            Part2Answer = processed[p2_input.Last()].ToString();
 
             return;
         }
