@@ -11,10 +11,9 @@ namespace adv_of_code_2020
         public string Part1Answer { get; set; } = "";
         public string Part2Answer { get; set; } = "";
 
-
         public async Task Run()
         {
-            int[] input = (await File.ReadAllLinesAsync("inputs\\10.txt")).Select(e => Int32.Parse(e)).OrderBy(e=>e).ToArray();
+            int[] input = (await File.ReadAllLinesAsync("inputs\\10.txt")).Select(e => Int32.Parse(e)).OrderBy(e => e).ToArray();
 
             int rating = input.Max() + 3;
 
@@ -22,7 +21,6 @@ namespace adv_of_code_2020
 
             //the jump from 0 to 1
             jolt_diffs.Add(1);
-            
 
             for (int i = 1; i < input.Length; i++)
             {
