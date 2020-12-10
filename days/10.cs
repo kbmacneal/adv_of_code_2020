@@ -46,6 +46,7 @@ namespace adv_of_code_2020
 
             var graph = new Dictionary<int, List<int>>();
 
+            //get the list of all numbers and associate them with all potential precursors from the list.
             for (var i = p2_input.Count - 1; i >= 0; i--)
             {
                 graph.Add(p2_input[i], new List<int>());
@@ -55,6 +56,7 @@ namespace adv_of_code_2020
                 if (indexedData.Contains(p2_input[i] - 3)) graph[p2_input[i]].Add(p2_input[i] - 3);
             }
 
+            //the number we're looking at associated with the total number of precursors
             var processed = new Dictionary<int, long>();
 
             for (var i = 0; i < p2_input.Count; i++)
@@ -64,6 +66,7 @@ namespace adv_of_code_2020
                 {
                     count += processed[g];
                 }
+
                 processed.Add(p2_input[i], count);
             }
 
