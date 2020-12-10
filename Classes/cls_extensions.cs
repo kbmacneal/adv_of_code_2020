@@ -90,6 +90,31 @@ namespace adv_of_code_.Classes
             return p.X.Abs() + p.Y.Abs();
         }
 
+        // 1 - string
+
+        public static T ToEnum<T>(this string value)
+        {
+            return (T)Enum.Parse(typeof(T), value, true);
+        }
+
+        // 2 - int
+
+        public static T ToEnum<T>(this int value)
+        {
+            var type = typeof(T);
+            if (!type.IsEnum)
+            {
+                throw new ArgumentException($"{type} is not an enum.");
+            }
+
+            if (!type.IsEnumDefined(value))
+            {
+                throw new ArgumentException($"{value} is not a valid ordinal of type {type}.");
+            }
+
+            return (T)Enum.ToObject(type, value);
+        }
+
         //from https://github.com/sjmulder/aoc/blob/master/2020/day01-cs-combine/Program.cs
         private static IEnumerable<IEnumerable<T>> Combine<T>(this T[] xs, int n)
         {
