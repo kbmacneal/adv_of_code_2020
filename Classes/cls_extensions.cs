@@ -115,6 +115,11 @@ namespace adv_of_code_.Classes
             return (T)Enum.ToObject(type, value);
         }
 
+        public static IEnumerable<P> Around(this IEnumerable<P> points, P origin, Boolean diagonals = false)
+        {
+            return points.Where(e => origin.Around(diagonals).ToList().Contains(e)).ToList();
+        }
+
         //from https://github.com/sjmulder/aoc/blob/master/2020/day01-cs-combine/Program.cs
         private static IEnumerable<IEnumerable<T>> Combine<T>(this T[] xs, int n)
         {

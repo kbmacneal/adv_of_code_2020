@@ -199,7 +199,7 @@ namespace adv_of_code_.Classes
         }
     }
 
-    [DebuggerDisplay("{X}, {Y}")]
+    [DebuggerDisplay("[{X}, {Y}]")]
     public struct P : IEquatable<P>
     {
         public int X { get; set; }
@@ -226,12 +226,19 @@ namespace adv_of_code_.Classes
             return HashCode.Combine(X, Y);
         }
 
-        public IEnumerable<P> Around()
+        public IEnumerable<P> Around(bool diagonals = false)
         {
             yield return new P { X = X, Y = Y - 1 };
             yield return new P { X = X - 1, Y = Y };
             yield return new P { X = X + 1, Y = Y };
             yield return new P { X = X, Y = Y + 1 };
+            if (diagonals)
+            {
+                yield return new P { X = X - 1, Y = Y - 1 };
+                yield return new P { X = X - 1, Y = Y + 1 };
+                yield return new P { X = X + 1, Y = Y + 1 };
+                yield return new P { X = X + 1, Y = Y - 1 };
+            }
         }
     }
 }
