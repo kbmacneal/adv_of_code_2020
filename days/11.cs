@@ -15,34 +15,24 @@ namespace adv_of_code_2020
 
         public async Task Run()
         {
-            string[] input = (await File.ReadAllLinesAsync("inputs\\11.test.txt"));
+            string[] input = (await File.ReadAllLinesAsync("inputs\\11.txt"));
 
             int changes = 1;
-            //int sim_count = 1;
 
             while (changes != 0)
             {
-                //sw.Start();
                 (input, changes) = run_sim(input);
-                //sw.Stop();
-                //Console.WriteLine("Ran sim {0}, {1} changes in {2}ms", sim_count, changes, sw.ElapsedMilliseconds);
-                //sw.Reset();
-                //sim_count++;
             }
 
             Part1Answer = string.Join("\r\n", input).Count(e => e == '#').ToString();
 
             changes = 1;
-            input = (await File.ReadAllLinesAsync("inputs\\11.test.txt"));
+            input = (await File.ReadAllLinesAsync("inputs\\11.txt"));
             while (changes != 0)
             {
-                //sw.Start();
                 (input, changes) = run_sim(input, true);
-                //sw.Stop();
-                //Console.WriteLine("Ran sim {0}, {1} changes in {2}ms", sim_count, changes, sw.ElapsedMilliseconds);
-                //sw.Reset();
-                //sim_count++;
             }
+
             Part2Answer = string.Join("\r\n", input).Count(e => e == '#').ToString();
         }
 
@@ -65,10 +55,21 @@ namespace adv_of_code_2020
                     {
                         case '#':
 
-                            if (surrounding.Count(e => e == '#') >= (part2 ? 5 : 4))
+                            if (part2)
                             {
-                                sb[x] = 'L';
-                                raw_changes++;
+                                if (surrounding.Count(e => e == '#') >= 5)
+                                {
+                                    sb[x] = 'L';
+                                    raw_changes++;
+                                }
+                            }
+                            else
+                            {
+                                if (surrounding.Count(e => e == '#') >= 4)
+                                {
+                                    sb[x] = 'L';
+                                    raw_changes++;
+                                }
                             }
 
                             break;
@@ -110,179 +111,64 @@ namespace adv_of_code_2020
             }
             else
             {
-                //up
-                var n = 1;
-                while (true)
+                int n = 1;
+                char[] dirs = new char[] { '.', '.', '.', '.', '.', '.', '.', '.' };
+                bool process = true;
+                while (process)
                 {
-                    if (y - n < 0) break;
-                    bool stopped = false;
-
-                    switch (spaces[y - n][x])
+                    process = false;
+                    //up
+                    if (y - n >= 0 && dirs[0] == '.')
                     {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y - n][x]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
+                        dirs[0] = spaces[y - n][x];
+                        process = true;
                     }
-                    if (stopped) break;
+                    //left
+                    if (x - n >= 0 && dirs[1] == '.')
+                    {
+                        dirs[1] = spaces[y][x - n];
+                        process = true;
+                    }
+                    //right
+                    if (x + n < spaces[y].Length && dirs[2] == '.')
+                    {
+                        dirs[2] = spaces[y][x + n];
+                        process = true;
+                    }
+                    //down
+                    if (y + n < spaces.Length && dirs[3] == '.')
+                    {
+                        dirs[3] = spaces[y + n][x];
+                        process = true;
+                    }
+                    //up left
+                    if (y - n >= 0 && x - n >= 0 && dirs[4] == '.')
+                    {
+                        dirs[4] = spaces[y - n][x - n];
+                        process = true;
+                    }
+                    //down left
+                    if (y + n < spaces.Length && x - n >= 0 && dirs[5] == '.')
+                    {
+                        dirs[5] = spaces[y + n][x - n];
+                        process = true;
+                    }
+                    //down right
+                    if (y + n < spaces.Length && x + n < spaces[y].Length && dirs[6] == '.')
+                    {
+                        dirs[6] = spaces[y + n][x + n];
+                        process = true;
+                    }
+                    //up right
+                    if (y - n >= 0 && x + n < spaces[y].Length && dirs[7] == '.')
+                    {
+                        dirs[7] = spaces[y - n][x + n];
+                        process = true;
+                    }
+
                     n++;
                 }
-                //down
-                n = 1;
-                while (true)
-                {
-                    if (y + n > spaces.Length - 1) break;
-                    bool stopped = false;
-
-                    switch (spaces[y + n][x])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y + n][x]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
-                //left
-                n = 1;
-                while (true)
-                {
-                    if (x - n < 0) break;
-                    bool stopped = false;
-
-                    switch (spaces[y][x - n])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y][x - n]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
-                //right
-                n = 1;
-                while (true)
-                {
-                    if (x + n > spaces[y].Length - 1) break;
-                    bool stopped = false;
-
-                    switch (spaces[y][x + n])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y][x + n]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
-
-                //up-left
-                n = 1;
-                while (true)
-                {
-                    if (y - n < 0) break;
-                    if (x - n < 0) break;
-                    bool stopped = false;
-
-                    switch (spaces[y - n][x - n])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y - n][x - n]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
-                //up-right
-                n = 1;
-                while (true)
-                {
-                    if (y - n < 0) break;
-                    if (x + n > spaces[y].Length - 1) break;
-                    bool stopped = false;
-
-                    switch (spaces[y - n][x + n])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y - n][x + n]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
-                //down-left
-                n = 1;
-                while (true)
-                {
-                    if (y + n > spaces.Length - 1) break;
-                    if (x - n < 0) break;
-                    bool stopped = false;
-
-                    switch (spaces[y + n][x - n])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y + n][x - n]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
-                //down-right
-                n = 1;
-                while (true)
-                {
-                    if (y + n > spaces.Length - 1) break;
-                    if (x + n > spaces[y].Length - 1) break;
-                    bool stopped = false;
-
-                    switch (spaces[y + n][x - n])
-                    {
-                        case 'L':
-                        case '#':
-                            chars.Add(spaces[y + n][x + n]);
-                            stopped = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    if (stopped) break;
-                    n++;
-                }
+                chars = dirs.Where(e => e != '.').ToList();
             }
 
             return chars.ToArray();
