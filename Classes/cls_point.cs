@@ -67,6 +67,12 @@ namespace adv_of_code_.Classes
         {
             var traveled_spaces = new List<Point>();
 
+            if(spaces == 0)
+            {
+                traveled_spaces.Add(new Point(this.X, this.Y));
+                return traveled_spaces;
+            }
+
             for (int i = 1; i <= spaces; i++)
             {
                 traveled_spaces.Add(new Point(this.X, this.Y + i));
@@ -78,6 +84,12 @@ namespace adv_of_code_.Classes
         public List<Point> moveDown(int spaces)
         {
             var traveled_spaces = new List<Point>();
+
+            if (spaces == 0)
+            {
+                traveled_spaces.Add(new Point(this.X, this.Y));
+                return traveled_spaces;
+            }
 
             for (int i = 1; i <= spaces; i++)
             {
@@ -91,6 +103,12 @@ namespace adv_of_code_.Classes
         {
             var traveled_spaces = new List<Point>();
 
+            if (spaces == 0)
+            {
+                traveled_spaces.Add(new Point(this.X, this.Y));
+                return traveled_spaces;
+            }
+
             for (int i = 1; i <= spaces; i++)
             {
                 traveled_spaces.Add(new Point(this.X + i, this.Y));
@@ -102,6 +120,12 @@ namespace adv_of_code_.Classes
         public List<Point> moveLeft(int spaces)
         {
             var traveled_spaces = new List<Point>();
+
+            if (spaces == 0)
+            {
+                traveled_spaces.Add(new Point(this.X, this.Y));
+                return traveled_spaces;
+            }
 
             for (int i = 1; i <= spaces; i++)
             {
