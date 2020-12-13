@@ -67,7 +67,7 @@ namespace adv_of_code_.Classes
         {
             var traveled_spaces = new List<Point>();
 
-            if(spaces == 0)
+            if (spaces == 0)
             {
                 traveled_spaces.Add(new Point(this.X, this.Y));
                 return traveled_spaces;

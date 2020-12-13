@@ -309,3 +309,4 @@ $RECYCLE.BIN/
 /.vs
 /outputs/*
 /inputs/*
+appsettings.json

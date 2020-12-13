@@ -1,11 +1,19 @@
 ﻿using CommandLine;
+using Flurl;
+using Flurl.Http;
+using Microsoft.Extensions.Configuration;
+using Serilog;
 using System;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace adv_of_code_2020
 {
     internal class Program
     {
+        public static IConfigurationRoot configuration;
+
         public class RuntimeOptions
         {
             [Option('d', "day", HelpText = "[Number of day] Run the solution for the given day.")]
@@ -18,7 +26,37 @@ namespace adv_of_code_2020
             public bool all { get; set; }
         }
 
-        private static void Main(string[] args)
+        private static int Main(string[] args)
+        {
+            Log.Logger = new LoggerConfiguration()
+                 .WriteTo.Console(Serilog.Events.LogEventLevel.Debug)
+                 .MinimumLevel
+                 .Debug().Enrich
+                 .FromLogContext()
+                 .CreateLogger();
+
+            configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+
+            try
+            {
+                // Start!
+                MainAsync(args).Wait();
+                return 0;
+            }
+            catch
+            {
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+
+        private static async Task MainAsync(string[] args)
         {
             Parser.Default.ParseArguments<RuntimeOptions>(args)
                 .WithParsed<RuntimeOptions>(o =>
@@ -37,13 +75,18 @@ namespace adv_of_code_2020
                             .Where(e => e.Name != "IDay")
                             .OrderBy(e => Int32.Parse(e.Name.Replace("Day", "")));
 
+                       var day_num = Int32.Parse(types.Last().Name.Replace("Day", ""));
+
+                       GetDayInput(day_num);
+
                        Type t = types.Last();
 
                        IDay day = (IDay)Activator.CreateInstance(t);
 
                        day.Run().GetAwaiter().GetResult();
 
-                       Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
+                       Log.Information("Part 1: " + day.Part1Answer);
+                       Log.Information("Part 2: " + day.Part2Answer);
                    }
 
                    if (o.day > 0)
@@ -57,11 +100,16 @@ namespace adv_of_code_2020
                             .OrderByDescending(e => e.GetType().Name)
                             .First();
 
+                       var day_num = Int32.Parse(t.Name.Replace("Day", ""));
+
+                       GetDayInput(day_num);
+
                        IDay day = (IDay)Activator.CreateInstance(t);
 
                        day.Run().GetAwaiter().GetResult();
 
-                       Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
+                       Log.Information("Part 1: " + day.Part1Answer);
+                       Log.Information("Part 2: " + day.Part2Answer);
                    }
 
                    if (!o.latest && o.day == 0 && !o.all)
@@ -79,11 +127,14 @@ namespace adv_of_code_2020
                                 .OrderByDescending(e => e.GetType().Name)
                                 .First();
 
+                           GetDayInput(day_num);
+
                            IDay day = (IDay)Activator.CreateInstance(t);
 
                            day.Run().GetAwaiter().GetResult();
 
-                           Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
+                           Log.Information("Part 1: " + day.Part1Answer);
+                           Log.Information("Part 2: " + day.Part2Answer);
                        }
                    }
 
@@ -98,16 +149,35 @@ namespace adv_of_code_2020
 
                        foreach (Type t in types)
                        {
+                           var day_num = Int32.Parse(t.Name.Replace("Day", ""));
+
+                           GetDayInput(day_num);
+
                            IDay day = (IDay)Activator.CreateInstance(t);
 
                            day.Run().GetAwaiter().GetResult();
 
                            Console.WriteLine(t.Name);
 
-                           Console.WriteLine("Part 1: " + day.Part1Answer + Environment.NewLine + "Part 2: " + day.Part2Answer);
+                           Log.Information("Part 1: " + day.Part1Answer);
+                           Log.Information("Part 2: " + day.Part2Answer);
                        }
                    }
                });
+        }
+
+        private static void GetDayInput(int day_num)
+        {
+            if (!File.Exists(string.Format("inputs\\{0}.txt", day_num)))
+            {
+                var result = "https://adventofcode.com/2020/day/"
+                .AppendPathSegment(day_num.ToString())
+                .AppendPathSegment("input")
+                .WithCookie("session", configuration.GetSection("session").Value)
+                .GetStringAsync().GetAwaiter().GetResult();
+
+                File.WriteAllTextAsync(string.Format("inputs\\{0}.txt", day_num), result).GetAwaiter().GetResult();
+            }
         }
     }
 }
