@@ -37,27 +37,76 @@ namespace adv_of_code_2020
 
             Part1Answer = (busses.Min(e => e.nextMultipleAfter).AbsDifference(target) * busses.OrderBy(e => e.nextMultipleAfter).First().id).ToString();
 
-            string[] times = input[1].Split(",");
+            //string[] times = input[1].Split(",");
 
-            var earliestTime = long.Parse(times[0]);
-            var increment = earliestTime;
-            for (int i = 1; i < times.Length; i++)
+            //var earliestTime = long.Parse(times[0]);
+            //var increment = earliestTime;
+            //for (int i = 1; i < times.Length; i++)
+            //{
+            //    if (times[i] == "x") continue;
+
+            //    var curTime = long.Parse(times[i]);
+
+            //    var modValue = curTime - (i % curTime);
+
+            //    while (earliestTime % curTime != modValue)
+            //    {
+            //        earliestTime += increment;
+            //    }
+
+            //    increment = new long[] { increment, curTime }.GetLCM();
+            //}
+
+            //Part2Answer = earliestTime.ToString();
+
+            Part2Answer = (await UsingCRT(input[1].Split(',').Where(e => e != "x").Select(e=>Convert.ToInt64(e)).ToList())).ToString();
+        }
+
+        public async Task<long> UsingCRT(List<long> departures)
+        {
+            long answer = ChineseRemainderTheorem(
+                departures
+                    .Where(x => x > 0)
+                    .Select(x => Convert.ToInt64(x))
+                    .ToArray(),
+                departures
+                    .Select((x, i) => new { i, x })
+                    .Where(x => x.x > 0)
+                    .Select(x => (x.x - x.i) % x.x) //(Bus ID - Position) % Bus ID
+                    .ToArray()
+                );
+
+            return answer;
+        }
+
+        public static long ChineseRemainderTheorem(long[] n, long[] a)
+        {
+            static long ModularMultiplicativeInverse(long a, long mod)
             {
-                if (times[i] == "x") continue;
+                long b = a % mod;
 
-                var curTime = long.Parse(times[i]);
-
-                var modValue = curTime - (i % curTime);
-
-                while (earliestTime % curTime != modValue)
+                for (int x = 1; x < mod; x++)
                 {
-                    earliestTime += increment;
+                    if ((b * x) % mod == 1)
+                    {
+                        return x;
+                    }
                 }
 
-                increment = new long[] { increment, curTime }.GetLCM();
+                return 1;
             }
 
-            Part2Answer = earliestTime.ToString();
+            long prod = n.Aggregate(1, (long i, long j) => i * j);
+            long sm = 0;
+
+            for (int i = 0; i < n.Length; i++)
+            {
+                var p = prod / n[i];
+
+                sm += a[i] * ModularMultiplicativeInverse(p, n[i]) * p;
+            }
+
+            return sm % prod;
         }
     }
 }
