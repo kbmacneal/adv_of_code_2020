@@ -31,10 +31,14 @@ namespace adv_of_code_2020
         {
             string[] input = await File.ReadAllLinesAsync("inputs\\12.txt");
 
+            Part1Answer = part1(input).ToString();
+
+            Part2Answer = part2(input).ToString();
+        }
+
+        private int part1(string[] input)
+        {
             ferry f = new ferry() { p = new Point(0, 0) };
-
-            Point waypoint = new Point(10, 1);
-
             foreach (var instr in input)
             {
                 switch (instr[0])
@@ -250,9 +254,13 @@ namespace adv_of_code_2020
                         break;
                 }
             }
-            Part1Answer = f.p.ManhDist().ToString();
+            return f.p.ManhDist();
+        }
 
-            f = new ferry() { p = new Point(0, 0) };
+        private int part2(string[] input)
+        {
+            ferry f = new ferry() { p = new Point(0, 0) };
+            Point waypoint = new Point(10, 1);
 
             foreach (var instr in input)
             {
@@ -337,7 +345,8 @@ namespace adv_of_code_2020
                         break;
                 }
             }
-            Part2Answer = f.p.ManhDist().ToString();
+
+            return f.p.ManhDist();
         }
     }
 }
