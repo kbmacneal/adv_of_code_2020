@@ -59,7 +59,7 @@ namespace adv_of_code_2020
 
             //Part2Answer = earliestTime.ToString();
 
-            Part2Answer = (await UsingCRT(input[1].Split(',').Where(e => e != "x").Select(e=>Convert.ToInt64(e)).ToList())).ToString();
+            Part2Answer = (await UsingCRT(input[1].Split(',').Where(e => e != "x").Select(e => Convert.ToInt64(e)).ToList())).ToString();
         }
 
         public async Task<long> UsingCRT(List<long> departures)

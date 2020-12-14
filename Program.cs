@@ -46,9 +46,9 @@ namespace adv_of_code_2020
                 MainAsync(args).Wait();
                 return 0;
             }
-            catch
+            catch (Exception)
             {
-                return 1;
+                throw;
             }
             finally
             {

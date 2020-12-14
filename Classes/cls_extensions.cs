@@ -13,6 +13,26 @@ namespace adv_of_code_2020.Classes
             return values.SelectMany(v => Permutations(values.Where(x => x.Equals(v) == false)), (v, p) => p.Prepend(v));
         }
 
+        public static long FromBinary(this string i)
+        {
+            long result = 0;
+
+            for (int n = 0; n < i.Length; n++)
+            {
+                result += i[n] == '1' ? Convert.ToInt64(Math.Pow(2, n)) : 0;
+            }
+
+            return result;
+        }
+
+        public static void Fill<T>(this T[] originalArray, T with)
+        {
+            for (int i = 0; i < originalArray.Length; i++)
+            {
+                originalArray[i] = with;
+            }
+        }
+
         public static long Product(this IEnumerable<int> product)
         {
             long answer = 1;
