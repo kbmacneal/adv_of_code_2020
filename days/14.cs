@@ -118,8 +118,6 @@ namespace adv_of_code_2020
             Part2Answer = memory.Select(e => e.Value).Sum().ToString();
         }
 
-        
-
         private long[] MaskedToAddresses(string mask)
         {
             long[] rtn = new long[Convert.ToInt32(Math.Pow(2, mask.Count(e => e == 'X')))];
