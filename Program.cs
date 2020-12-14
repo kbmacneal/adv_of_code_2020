@@ -4,6 +4,7 @@ using Flurl.Http;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,6 +59,8 @@ namespace adv_of_code_2020
 
         private static async Task MainAsync(string[] args)
         {
+            Stopwatch sw = new Stopwatch();
+
             Parser.Default.ParseArguments<RuntimeOptions>(args)
                 .WithParsed<RuntimeOptions>(o =>
                {
@@ -83,10 +86,13 @@ namespace adv_of_code_2020
 
                        IDay day = (IDay)Activator.CreateInstance(t);
 
+                       sw.Start();
                        day.Run().GetAwaiter().GetResult();
-
+                       sw.Stop();
                        Log.Information("Part 1: " + day.Part1Answer);
                        Log.Information("Part 2: " + day.Part2Answer);
+                       Log.Information(String.Format("Solution ran in {0}ms", sw.ElapsedMilliseconds));
+                       sw.Reset();
                    }
 
                    if (o.day > 0)
@@ -106,10 +112,13 @@ namespace adv_of_code_2020
 
                        IDay day = (IDay)Activator.CreateInstance(t);
 
+                       sw.Start();
                        day.Run().GetAwaiter().GetResult();
-
+                       sw.Stop();
                        Log.Information("Part 1: " + day.Part1Answer);
                        Log.Information("Part 2: " + day.Part2Answer);
+                       Log.Information(String.Format("Solution ran in {0}ms", sw.ElapsedMilliseconds));
+                       sw.Reset();
                    }
 
                    if (!o.latest && o.day == 0 && !o.all)
@@ -131,10 +140,13 @@ namespace adv_of_code_2020
 
                            IDay day = (IDay)Activator.CreateInstance(t);
 
+                           sw.Start();
                            day.Run().GetAwaiter().GetResult();
-
+                           sw.Stop();
                            Log.Information("Part 1: " + day.Part1Answer);
                            Log.Information("Part 2: " + day.Part2Answer);
+                           Log.Information(String.Format("Solution ran in {0}ms", sw.ElapsedMilliseconds));
+                           sw.Reset();
                        }
                    }
 
@@ -155,12 +167,14 @@ namespace adv_of_code_2020
 
                            IDay day = (IDay)Activator.CreateInstance(t);
 
+                           sw.Start();
                            day.Run().GetAwaiter().GetResult();
-
-                           Console.WriteLine(t.Name);
-
+                           sw.Stop();
+                           Log.Information(t.Name);
                            Log.Information("Part 1: " + day.Part1Answer);
                            Log.Information("Part 2: " + day.Part2Answer);
+                           Log.Information(String.Format("Solution ran in {0}ms", sw.ElapsedMilliseconds));
+                           sw.Reset();
                        }
                    }
                });
