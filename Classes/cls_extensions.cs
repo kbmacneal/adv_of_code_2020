@@ -13,6 +13,13 @@ namespace adv_of_code_2020.Classes
             return values.SelectMany(v => Permutations(values.Where(x => x.Equals(v) == false)), (v, p) => p.Prepend(v));
         }
 
+        public static int DifferenceBetweenLastTwo(this List<int> l)
+        {
+            var temp = l.Skip(l.Count - 2).Take(2);
+
+            return Math.Abs(temp.First() - temp.Last());
+        }
+
         public static long FromBinary(this string i)
         {
             long result = 0;
