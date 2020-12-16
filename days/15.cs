@@ -14,8 +14,6 @@ namespace adv_of_code_2020
         public string Part2Answer { get; set; } = "";
         public Stopwatch sw { get; set; } = new Stopwatch();
 
-        //[DebuggerDisplay("mask={string.Join(\"\",mask)}|addr={address}|value={value}")]
-
         public async Task Run()
         {
             int[] input = (await File.ReadAllTextAsync("inputs\\15.txt")).Split(",").Select(Int32.Parse).ToArray();
