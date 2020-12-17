@@ -26,24 +26,22 @@ namespace adv_of_code_2020
                 }
             }
 
-            var count = new Dictionary<(int x, int y, int z), int>(1024);
             var dirs = Enumerable.Range(-1, 3)
                 .SelectMany(x => Enumerable.Range(-1, 3)
-                    .SelectMany(y => Enumerable.Range(-1, 3)
-                        .Select(z => (x, y, z))))
-                .Where(d => d != (0, 0, 0))
-                .ToArray();
+                .SelectMany(y => Enumerable.Range(-1, 3)
+                    .Select(z => (x, y, z))))
+                .Where(d => d != (0, 0, 0));
 
             for (int i = 0; i < 6; i++)
             {
-                count.Clear();
+                var count = new Dictionary<(int x, int y, int z), int>(1024);
 
                 foreach (var p in state.Keys)
                 {
                     count[p] = 0;
                 }
 
-                foreach (var ((x, y, z), alive) in state.Where(kvp => kvp.Value))
+                foreach (var ((x, y, z), active) in state.Where(kvp => kvp.Value))
                 {
                     foreach (var (dx, dy, dz) in dirs)
                     {
@@ -64,37 +62,38 @@ namespace adv_of_code_2020
 
             Part1Answer = state.Where(kvp => kvp.Value).Count().ToString();
 
-            DoPartB(await File.ReadAllBytesAsync("inputs\\17.txt"));
+            Part2Answer = DoPartB(input);
         }
 
-        private void DoPartB(byte[] input)
+        private string DoPartB(string[] input)
         {
-            var state = new Dictionary<(int x, int y, int z, int w), bool>(8192);
-            int _x = 0, _y = 0;
-            foreach (var c in input)
+            Dictionary<(int x, int y, int z, int w), Boolean> state = new Dictionary<(int x, int y, int z, int w), Boolean>();
+
+            for (int y = 0; y < input.Length; y++)
             {
-                if (c == '\n') { _x = 0; _y++; }
-                else state[(_x++, _y, 0, 0)] = c == '#';
+                for (int x = 0; x < input[y].Length; x++)
+                {
+                    state.Add((x, y, 0, 0), input[y][x] == '#');
+                }
             }
 
-            var count = new Dictionary<(int x, int y, int z, int w), int>(8192);
             var dirs = Enumerable.Range(-1, 3)
                 .SelectMany(x => Enumerable.Range(-1, 3)
-                    .SelectMany(y => Enumerable.Range(-1, 3)
-                        .SelectMany(z => Enumerable.Range(-1, 3)
-                            .Select(w => (x, y, z, w)))))
-                .Where(d => d != (0, 0, 0, 0))
-                .ToArray();
+                .SelectMany(y => Enumerable.Range(-1, 3)
+                .SelectMany(z => Enumerable.Range(-1, 3)
+                    .Select(w => (x, y, z, w)))))
+                .Where(d => d != (0, 0, 0, 0));
+
             for (int i = 0; i < 6; i++)
             {
-                count.Clear();
+                var count = new Dictionary<(int x, int y, int z, int w), int>(8192);
 
                 foreach (var p in state.Keys)
                 {
                     count[p] = 0;
                 }
 
-                foreach (var ((x, y, z, w), alive) in state.Where(kvp => kvp.Value))
+                foreach (var ((x, y, z, w), active) in state.Where(kvp => kvp.Value))
                 {
                     foreach (var (dx, dy, dz, dw) in dirs)
                     {
@@ -113,7 +112,7 @@ namespace adv_of_code_2020
                 }
             }
 
-            Part2Answer = state.Where(kvp => kvp.Value).Count().ToString();
+            return state.Where(kvp => kvp.Value).Count().ToString();
         }
     }
 }
