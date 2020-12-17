@@ -13,6 +13,39 @@ namespace adv_of_code_2020.Classes
             return values.SelectMany(v => Permutations(values.Where(x => x.Equals(v) == false)), (v, p) => p.Prepend(v));
         }
 
+        public static IEnumerable<T> Cartesian<T>(this IEnumerable<IEnumerable<T>> items)
+        {
+            var slots = items
+               // initialize enumerators
+               .Select(x => x.GetEnumerator())
+               // get only those that could start in case there is an empty collection
+               .Where(x => x.MoveNext())
+               .ToArray();
+
+            while (true)
+            {
+                // yield current values
+                yield return (T)slots.Select(x => x.Current);
+
+                // increase enumerators
+                foreach (var slot in slots)
+                {
+                    // reset the slot if it couldn't move next
+                    if (!slot.MoveNext())
+                    {
+                        // stop when the last enumerator resets
+                        if (slot == slots.Last()) { yield break; }
+                        slot.Reset();
+                        slot.MoveNext();
+                        // move to the next enumerator if this reseted
+                        continue;
+                    }
+                    // we could increase the current enumerator without reset so stop here
+                    break;
+                }
+            }
+        }
+
         public static int DifferenceBetweenLastTwo(this List<int> l)
         {
             var temp = l.Skip(l.Count - 2).Take(2);
