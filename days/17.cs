@@ -16,7 +16,7 @@ namespace adv_of_code_2020
         public async Task Run()
         {
             string[] input = await File.ReadAllLinesAsync("inputs\\17.txt");
-            Dictionary<(int x, int y, int z), Boolean> state = new Dictionary<(int x, int y, int z), Boolean>();
+            Dictionary<(int x, int y, int z), Boolean> state = new();
 
             for (int y = 0; y < input.Length; y++)
             {
@@ -67,7 +67,7 @@ namespace adv_of_code_2020
 
         private string DoPartB(string[] input)
         {
-            Dictionary<(int x, int y, int z, int w), Boolean> state = new Dictionary<(int x, int y, int z, int w), Boolean>();
+            Dictionary<(int x, int y, int z, int w), Boolean> state = new();
 
             for (int y = 0; y < input.Length; y++)
             {
