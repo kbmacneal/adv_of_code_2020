@@ -190,6 +190,8 @@ namespace adv_of_code_2020
                 .WithCookie("session", configuration.GetSection("session").Value)
                 .GetStringAsync().GetAwaiter().GetResult();
 
+                if (!Directory.Exists("inputs")) Directory.CreateDirectory("inputs");
+
                 File.WriteAllTextAsync(string.Format("inputs\\{0}.txt", day_num), result).GetAwaiter().GetResult();
             }
         }

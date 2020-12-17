@@ -1,4 +1,3 @@
-using adv_of_code_2020.Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,80 +16,104 @@ namespace adv_of_code_2020
         public async Task Run()
         {
             string[] input = await File.ReadAllLinesAsync("inputs\\17.txt");
-            Dictionary<Point3D, Boolean> cubes = new Dictionary<Point3D, bool>();
+            Dictionary<(int x, int y, int z), Boolean> state = new Dictionary<(int x, int y, int z), Boolean>();
 
             for (int y = 0; y < input.Length; y++)
             {
                 for (int x = 0; x < input[y].Length; x++)
                 {
-                    cubes.Add(new Point3D(x, y, 0), input[y][x] == '#');
+                    state.Add((x, y, 0), input[y][x] == '#');
                 }
             }
+
+            var count = new Dictionary<(int x, int y, int z), int>(1024);
+            var dirs = Enumerable.Range(-1, 3)
+                .SelectMany(x => Enumerable.Range(-1, 3)
+                    .SelectMany(y => Enumerable.Range(-1, 3)
+                        .Select(z => (x, y, z))))
+                .Where(d => d != (0, 0, 0))
+                .ToArray();
 
             for (int i = 0; i < 6; i++)
             {
-                cubes = run_sim(cubes);
+                count.Clear();
+
+                foreach (var p in state.Keys)
+                {
+                    count[p] = 0;
+                }
+
+                foreach (var ((x, y, z), alive) in state.Where(kvp => kvp.Value))
+                {
+                    foreach (var (dx, dy, dz) in dirs)
+                    {
+                        count[(x + dx, y + dy, z + dz)] = count.GetValueOrDefault((x + dx, y + dy, z + dz)) + 1;
+                    }
+                }
+
+                foreach (var (p, c) in count)
+                {
+                    state[p] = (state.GetValueOrDefault(p), c) switch
+                    {
+                        (true, >= 2 and <= 3) => true,
+                        (false, 3) => true,
+                        _ => false,
+                    };
+                }
             }
 
-            Part1Answer = cubes.Count(e => e.Value).ToString();
+            Part1Answer = state.Where(kvp => kvp.Value).Count().ToString();
+
+            DoPartB(await File.ReadAllBytesAsync("inputs\\17.txt"));
         }
 
-        public Dictionary<Point3D, Boolean> run_sim(Dictionary<Point3D, Boolean> cubes)
+        private void DoPartB(byte[] input)
         {
-            List<Point3D> cubes_to_add = new List<Point3D>();
-            List<Point3D> fliptofalse = new List<Point3D>();
-            List<Point3D> fliptotrue = new List<Point3D>();
-
-            var state = cubes;
-
-            foreach (var cube in cubes)
+            var state = new Dictionary<(int x, int y, int z, int w), bool>(8192);
+            int _x = 0, _y = 0;
+            foreach (var c in input)
             {
-                var surrounding = cube.Key.GetSurrounding();
+                if (c == '\n') { _x = 0; _y++; }
+                else state[(_x++, _y, 0, 0)] = c == '#';
+            }
 
-                foreach (var surround in surrounding)
+            var count = new Dictionary<(int x, int y, int z, int w), int>(8192);
+            var dirs = Enumerable.Range(-1, 3)
+                .SelectMany(x => Enumerable.Range(-1, 3)
+                    .SelectMany(y => Enumerable.Range(-1, 3)
+                        .SelectMany(z => Enumerable.Range(-1, 3)
+                            .Select(w => (x, y, z, w)))))
+                .Where(d => d != (0, 0, 0, 0))
+                .ToArray();
+            for (int i = 0; i < 6; i++)
+            {
+                count.Clear();
+
+                foreach (var p in state.Keys)
                 {
-                    if (!cubes.ContainsKey(surround)) cubes_to_add.Add(surround);
+                    count[p] = 0;
                 }
-            }
 
-            foreach (var cube in cubes_to_add)
-            {
-                cubes[cube] = false;
-            }
-
-            foreach (var cube in cubes)
-            {
-                var surrounding = cube.Key.GetSurrounding().Where(e => e != cube.Key);
-
-                var actual_surrounding = cubes.Where(e => surrounding.Contains(e.Key));
-
-                if (cube.Value)
+                foreach (var ((x, y, z, w), alive) in state.Where(kvp => kvp.Value))
                 {
-                    if (new int[] { 2, 3 }.Contains(actual_surrounding.Count(e => e.Value)))
+                    foreach (var (dx, dy, dz, dw) in dirs)
                     {
-                        fliptofalse.Add(cube.Key);
+                        count[(x + dx, y + dy, z + dz, w + dw)] = count.GetValueOrDefault((x + dx, y + dy, z + dz, w + dw)) + 1;
                     }
                 }
-                else if (!cube.Value)
+
+                foreach (var (p, c) in count)
                 {
-                    if (actual_surrounding.Count(e => e.Value) == 3)
+                    state[p] = (state.GetValueOrDefault(p), c) switch
                     {
-                        fliptotrue.Add(cube.Key);
-                    }
+                        (true, >= 2 and <= 3) => true,
+                        (false, 3) => true,
+                        _ => false,
+                    };
                 }
             }
 
-            foreach (var cube in fliptofalse)
-            {
-                state[cube] = false;
-            }
-
-            foreach (var cube in fliptotrue)
-            {
-                state[cube] = true;
-            }
-
-            return state;
+            Part2Answer = state.Where(kvp => kvp.Value).Count().ToString();
         }
     }
 }
