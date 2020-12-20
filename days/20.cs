@@ -31,7 +31,7 @@ namespace adv_of_code_2020
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public async Task Run()
         {
-            string[] input = (await File.ReadAllTextAsync("inputs\\20.txt")).Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] input = (await (this as IDay).ReadString(20)).Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
 
             List<piece> pieces = parse(input);
 
