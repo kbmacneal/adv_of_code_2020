@@ -14,12 +14,12 @@ namespace adv_of_code_2020
         {
         }
 
-        public async Task<string[]> ReadInputAsync(int day_num)
+        public static async Task<string[]> ReadInputAsync(int day_num)
         {
             return await File.ReadAllLinesAsync(string.Format("inputs\\{0}.txt", day_num.ToString()));
         }
 
-        public async Task<string> ReadStringAsync(int day_num)
+        public static async Task<string> ReadStringAsync(int day_num)
         {
             return await File.ReadAllTextAsync(string.Format("inputs\\{0}.txt", day_num.ToString()));
         }
