@@ -19,7 +19,7 @@ namespace adv_of_code_2020
             return await File.ReadAllLinesAsync(string.Format("inputs\\{0}.txt", day_num.ToString()));
         }
 
-        public async Task<string> ReadString(int day_num)
+        public async Task<string> ReadStringAsync(int day_num)
         {
             return await File.ReadAllTextAsync(string.Format("inputs\\{0}.txt", day_num.ToString()));
         }
