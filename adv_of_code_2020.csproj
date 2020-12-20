@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="FLuentAssertions" Version="5.10.3" />
     <PackageReference Include="flurl" Version="3.0.0" />
     <PackageReference Include="flurl.http" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
