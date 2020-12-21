@@ -21,13 +21,14 @@ namespace adv_of_code_2020
 
             //allergen, list of associated ingredients
             Dictionary<string, List<string>> allergens = new();
-            Dictionary<string, (string allergen, int number)> ingredients = new Dictionary<string, (string, int)>();
+            Dictionary<string, (string allergen, int number)> ingredients = new();
 
             foreach (string food in input)
             {
                 string foodIngredients = food.Split(" (contains ")[0];
-                string foodAllergens = food.Replace(")", " ").Split(" (contains ")[1];
-                foreach (string allergen in foodAllergens.Split(new char[] { ' ', ',', ')' }, StringSplitOptions.RemoveEmptyEntries))
+                string foodAllergens = food.Replace(")", "").Split(" (contains ")[1];
+
+                foreach (string allergen in foodAllergens.Split(", "))
                 {
                     if (allergens.ContainsKey(allergen))
                     {
