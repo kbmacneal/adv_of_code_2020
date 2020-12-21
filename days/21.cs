@@ -71,11 +71,7 @@ namespace adv_of_code_2020
 
             Part1Answer = ingredients.Where(i => i.Value.allergen == "").Sum(i => i.Value.number).ToString();
 
-            string canonical = string.Empty;
-            foreach (KeyValuePair<string, (string, int)> food in ingredients.Where(i => i.Value.allergen != "").OrderBy(i => i.Value.allergen))
-                canonical += food.Key + ',';
-
-            Part2Answer = canonical[0..^1].ToString();
+            Part2Answer = string.Join(",", ingredients.Where(i => i.Value.allergen != "").OrderBy(i => i.Value.allergen).Select(e => e.Key));
         }
     }
 }
