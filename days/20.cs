@@ -1,6 +1,7 @@
 using adv_of_code_2020.Classes;
 using MoreLinq;
 using MoreLinq.Extensions;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -218,7 +219,7 @@ namespace adv_of_code_2020
                     }
                 }
 
-                Console.WriteLine("Placed all tiles.");
+                Log.Verbose("Placed all tiles.");
                 // Placed all tiles, need to orient!
 
                 bool IsOrientationCorrect(int x, int y, Tile tile = null)
@@ -280,7 +281,7 @@ namespace adv_of_code_2020
                     }
                 }
 
-                Console.WriteLine("Oriented pieces.");
+                Log.Verbose("Oriented pieces.");
 
                 var gridSize = (tileSize - 2) * size;
                 var emptyGrid = Enumerable.Range(0, gridSize)
@@ -310,7 +311,7 @@ namespace adv_of_code_2020
                     }
                 }
 
-                Console.WriteLine("Stripped edges.");
+                Log.Verbose("Stripped edges.");
 
                 Spaces = emptyGrid;
             }

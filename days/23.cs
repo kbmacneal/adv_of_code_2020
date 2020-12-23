@@ -1,3 +1,4 @@
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -63,7 +64,7 @@ namespace adv_of_code_2020
             for (int i = 0; i < 2; i++)
             {
                 index = index.Next ?? cups.First;
-                Console.WriteLine(index.Value);
+                Log.Verbose(index.Value.ToString());
                 product *= index.Value;
             }
 
